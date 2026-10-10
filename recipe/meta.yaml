@@ -1,5 +1,5 @@
 {% set name = "soapysdr-module-airspy" %}
-{% set version = "0.2.0" %}
+{% set version = "0.2.1" %}
 
 package:
   name: {{ name|lower }}
@@ -7,7 +7,7 @@ package:
 
 source:
   url: https://github.com/pothosware/SoapyAirspy/archive/soapy-airspy-{{ version }}.tar.gz
-  sha256: 4279ab4278fab699ef8325f3f921b2307496130a56028d33022be10916b6ccff
+  sha256: 6170c8462a026282c48b89cadf70d93b671999b3930267442a1754e2a67248f2
 
 build:
   number: 0
@@ -17,6 +17,7 @@ build:
 requirements:
   build:
     - {{ compiler('cxx') }}
+    - {{ stdlib("c") }}
     - cmake
     - make  # [not win]
     - ninja  # [win]

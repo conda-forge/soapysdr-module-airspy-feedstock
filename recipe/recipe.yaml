@@ -1,0 +1,56 @@
+schema_version: 1
+
+context:
+  name: soapysdr-module-airspy
+  version: "0.2.1"
+
+package:
+  name: ${{ name|lower }}
+  version: ${{ version }}
+
+source:
+  url: https://github.com/pothosware/SoapyAirspy/archive/soapy-airspy-${{ version }}.tar.gz
+  sha256: 6170c8462a026282c48b89cadf70d93b671999b3930267442a1754e2a67248f2
+
+build:
+  number: 0
+
+requirements:
+  build:
+    - ${{ compiler("cxx") }}
+    - ${{ stdlib("c") }}
+    - cmake
+    - ninja
+  host:
+    - libairspy
+    - soapysdr
+  run_exports:
+    - ${{ pin_subpackage("soapysdr-module-airspy", upper_bound="x.x") }}
+
+tests:
+  - package_contents:
+      strict: true
+      files:
+        - if: not win
+          then: lib/SoapySDR/modules${{ soapysdr }}/libairspySupport.so
+          else: Library/lib/SoapySDR/modules${{ soapysdr }}/airspySupport.dll
+  - script:
+      - SoapySDRUtil --info
+      - if: not win
+        then: SoapySDRUtil --info | grep airspySupport
+        else: SoapySDRUtil --info | findstr /l airspySupport
+
+about:
+  license: MIT
+  license_file: LICENSE.txt
+  summary: SoapySDR Airspy Support Module
+  description: |
+    The Soapy Airspy project provides a plugin module to use Airspy radio
+    devices within the SoapySDR API and software that supports SoapySDR.
+  homepage: https://github.com/pothosware/SoapyAirspy/wiki
+  repository: https://github.com/pothosware/SoapyAirspy
+  documentation: https://github.com/pothosware/SoapyAirspy/wiki
+
+extra:
+  recipe-maintainers:
+    - ryanvolz
